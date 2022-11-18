@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 /// The type of behavior of this widget.
 enum ExpandableFabType { fan, up, left }
 
+typedef OverrideChildBuilder = Widget Function(BuildContext context, void Function()? toggle);
+
 /// Style of the overlay.
 @immutable
 class ExpandableFabOverlayStyle {
@@ -36,6 +38,7 @@ class ExpandableFabCloseButtonStyle {
     this.child = const Icon(Icons.close),
     this.foregroundColor,
     this.backgroundColor,
+    this.overrideChildBuilder,
   });
 
   /// The widget below the close button widget in the tree.
@@ -46,6 +49,8 @@ class ExpandableFabCloseButtonStyle {
 
   /// The button's background color.
   final Color? backgroundColor;
+
+  final OverrideChildBuilder? overrideChildBuilder;
 }
 
 class _ExpandableFabLocation extends StandardFabLocation {
@@ -277,6 +282,9 @@ class ExpandableFabState extends State<ExpandableFab>
 
   Widget _buildTapToCloseFab() {
     final style = widget.closeButtonStyle;
+    if (style.overrideChildBuilder != null) {
+      return style.overrideChildBuilder!(context, toggle);
+    }
     return FloatingActionButton.small(
       heroTag: null,
       foregroundColor: style.foregroundColor,
