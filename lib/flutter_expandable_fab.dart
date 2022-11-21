@@ -265,6 +265,7 @@ class ExpandableFabState extends State<ExpandableFab>
               ),
             ),
           ..._buildExpandingActionButtons(offset),
+          const SizedBox(height: 5,),
           Transform.translate(
             offset: -offset,
             child: Stack(
